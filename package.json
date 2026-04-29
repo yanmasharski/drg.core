@@ -1,0 +1,13 @@
+{
+    "name": "com.drg.core",
+    "version": "1.0.0",
+    "displayName": "DRG Core",
+    "description": "Core signal bus, command pattern, and logger interface. No Unity dependencies.",
+    "unity": "2022.3",
+    "author": {
+        "name": "Jan Mašarski",
+        "email": "yanmasharski@gmail.com",
+        "url": "https://yanmasharski.github.io"
+    },
+    "dependencies": {}
+}
