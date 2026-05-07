@@ -1,0 +1,16 @@
+{
+    "name": "DRG.Core.Runtime",
+    "rootNamespace": "DRG.Core",
+    "references": [
+        "DRG.Core"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": true
+}
