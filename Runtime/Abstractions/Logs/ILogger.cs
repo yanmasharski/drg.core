@@ -7,10 +7,10 @@ namespace DRG.Core.Logs
 	/// </summary>
 	public interface ILogger
 	{
-		void Log(string message);
-		void LogWarning(string message);
-		void LogError(string message);
-		void LogException(Exception exception);
+		void Log(Func<string> message);
+		void LogWarning(Func<string> message);
+		void LogError(Func<string> message);
+		void LogException(Func<Exception> exception);
 
 		public enum LogLevel : byte
 		{
@@ -18,7 +18,10 @@ namespace DRG.Core.Logs
 			Info = 1,
 			Warning = 2,
 			Error = 3,
-			Fatal = 4
+			Fatal = 4,
+
+			/// <summary>No log output.</summary>
+			None = 5,
 		}
 	}
 }

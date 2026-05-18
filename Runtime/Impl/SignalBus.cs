@@ -100,7 +100,7 @@ namespace DRG.Core
 				}
 				catch (Exception e)
 				{
-					_logger.LogException(e);
+					_logger.LogException(() => e);
 				}
 			}
 		}
