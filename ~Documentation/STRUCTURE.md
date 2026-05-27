@@ -46,19 +46,19 @@ Rule: namespace is always `DRG.{Domain}` — no `.Runtime`, `.Impl`, or `.Abstra
 Sub-namespaces only for cross-cutting concerns within a domain:
 
 ```
-DRG.Core                  ISignalBus, IServiceLocator, ICommand, ISignal, IMainThreadDispatcher
+DRG.Core                  ISignalBus, IObservable, IObserver, IServiceLocator, ICommand, ISignal, IMainThreadDispatcher
 DRG.Core.Logs             ILogger
 DRG.Framework             IModuleNode, IModuleServiceLocator, IModuleSignalBus, ModuleState
 DRG.Utils                 IAppReviewDialog, IDebouncedExecutor
-DRG.Ads                   IAdsController, IFullscreenAd, IAdImpression, AdFormat
+DRG.Ads                   IAdsSystem, IFullscreenAd, IAdImpression, AdFormat
 DRG.Consent               IConsentPlatform, ConsentState
 DRG.Data                  IDataStorage, IDataRecord, IDataProvider, ITypedDataRecord
 DRG.Data.Serialization    IDataSerializer
 ```
 
 Implementations use the **same namespace** as abstractions:
-- `SignalBus` → `DRG.Core`
-- `AdsController` → `DRG.Ads`
+- `SignalBus`, `Observable` → `DRG.Core`
+- `AdsSystem` → `DRG.Ads`
 - `LoggerUnity` → `DRG.Core.Logs`
 
 ---

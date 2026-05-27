@@ -6,7 +6,7 @@ namespace DRG.Core
 {
 	public class SignalBus : ISignalBus
 	{
-		private readonly Dictionary<Type, List<Delegate>> _listeners = new();
+		private readonly Dictionary<Type, object> _observables = new();
 		private readonly Queue<Action> _dispatchQueue = new();
 		private readonly ILogger _logger;
 
@@ -21,16 +21,7 @@ namespace DRG.Core
 		{
 			lock (_lockObject)
 			{
-				var type = typeof(T);
-
-				if (_listeners.TryGetValue(type, out var list))
-				{
-					list.Add(callback);
-				}
-				else
-				{
-					_listeners[type] = new List<Delegate> { callback };
-				}
+				GetOrCreateObservable<T>().Subscribe(callback);
 			}
 		}
 
@@ -38,14 +29,12 @@ namespace DRG.Core
 		{
 			lock (_lockObject)
 			{
-				var type = typeof(T);
-
-				if (!_listeners.TryGetValue(type, out var list))
+				if (!_observables.TryGetValue(typeof(T), out var observable))
 				{
 					return;
 				}
 
-				list.Remove(callback);
+				((Observable<T>)observable).Unsubscribe(callback);
 			}
 		}
 
@@ -79,38 +68,26 @@ namespace DRG.Core
 
 		private void DispatchTyped<T>(T signal) where T : ISignal
 		{
-			List<Delegate> listenersCopy;
+			Observable<T> observable;
 			lock (_lockObject)
 			{
-				var type = typeof(T);
-				if (!_listeners.TryGetValue(type, out var list))
+				if (!_observables.TryGetValue(typeof(T), out var obj))
 				{
-					_logger.LogWarning($"No listeners found for signal type {type}");
+					_logger.LogWarning($"No listeners found for signal type {typeof(T)}");
 					return;
 				}
-				listenersCopy = new List<Delegate>(list);
+
+				observable = (Observable<T>)obj;
 			}
 
-			foreach (var listener in listenersCopy)
-			{
-				try
-				{
-					var callback = listener as ISignalBus.SignalHandler<T>;
-					callback?.Invoke(signal);
-				}
-				catch (Exception e)
-				{
-					_logger.LogException(() => e);
-				}
-			}
+			observable.Notify(signal);
 		}
 
 		public void ClearSignalListeners<T>() where T : ISignal
 		{
 			lock (_lockObject)
 			{
-				var type = typeof(T);
-				_listeners.Remove(type);
+				_observables.Remove(typeof(T));
 			}
 		}
 
@@ -118,8 +95,22 @@ namespace DRG.Core
 		{
 			lock (_lockObject)
 			{
-				_listeners.Clear();
+				_observables.Clear();
 			}
 		}
+
+		private Observable<T> GetOrCreateObservable<T>() where T : ISignal
+		{
+			var type = typeof(T);
+			if (_observables.TryGetValue(type, out var observable))
+			{
+				return (Observable<T>)observable;
+			}
+
+			var created = new Observable<T>(_logger);
+			_observables[type] = created;
+			return created;
+		}
+
 	}
 }

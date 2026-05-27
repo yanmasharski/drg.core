@@ -1,5 +1,6 @@
 .DS_Store
 .idea/
 *.user
+*.md.meta
 CLAUDE.md.meta
 skill_integration_com.drg.core.md.meta
