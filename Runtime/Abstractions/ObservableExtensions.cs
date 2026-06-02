@@ -4,6 +4,16 @@ namespace DRG.Core
 {
 	public static class ObservableExtensions
 	{
+		public static IDisposable Subscribe(this IObservable<Unit> observable, Action onNext)
+		{
+			if (onNext == null)
+			{
+				throw new ArgumentNullException(nameof(onNext));
+			}
+
+			return observable.Subscribe(_ => onNext());
+		}
+
 		public static IDisposable Subscribe<T>(this IObservable<T> observable, Action<T> onNext)
 		{
 			if (observable == null)

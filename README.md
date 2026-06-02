@@ -14,7 +14,7 @@ Foundation package. Defines the core contracts used across all DRG packages. No 
 ## Key types
 
 - **`ISignalBus`** — subscribe/emit/flush typed signals. `SignalBus` queues signals on `Emit()` and dispatches on `FlushSignals()`.
-- **`IObservable<T>` / `IObserver<T>`** — push-based subscription model. `Observable<T>` is the thread-safe publisher used internally by `SignalBus` and for per-object state (e.g. ad readiness).
+- **`IObservable<T>` / `IObserver<T>`** — push-based subscription model. `Observable<T>` is the thread-safe publisher used internally by `SignalBus` and for per-object state (e.g. ad readiness). Payload-free signals use `Unit` and `IObservable<Unit>`.
 - **`IServiceLocator`** — `Register<T>` / `TryGet<T>` dependency container.
 - **`ICommand`** — fire-and-forget command marker interface.
 - **`ILogger`** — logging abstraction (`DRG.Core.Logs` namespace). Production impl in `drg.framework`.
